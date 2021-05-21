@@ -1,0 +1,18 @@
+.nav {
+    display: flex;
+    justify-content: center;
+    background-color: #eedbb9;
+    padding: 20px;
+}
+
+.item a {
+    color: royalblue;
+    text-decoration: none;
+    border-bottom: royalblue solid 1px;
+    margin-left: 30px;
+}
+.item a.active {
+    color: slategrey;
+    border-bottom: slategrey solid 1px;
+    margin-left: 30px;
+}
