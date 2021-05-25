@@ -2,7 +2,6 @@ import {AppStateType} from "../../redux/store";
 import {connect} from "react-redux";
 import {
     addCardsPack,
-    CardPacksType,
     deleteCardsPack,
     getPacksTC,
     setCurrentPage, setIsMyPack, updateCardsPack
@@ -10,6 +9,7 @@ import {
 import Packs from "./Packs";
 import {ChangeEvent, useEffect} from "react";
 import {getAuthUserDataTC} from "../../redux/auth-reducer";
+import { getPacksReqTC } from "../../redux/packs-request-reducer";
 
 
 // type PropsType = {
@@ -23,21 +23,28 @@ import {getAuthUserDataTC} from "../../redux/auth-reducer";
 
 const PacksContainer: React.FC<any> = (props) => {
     useEffect(() => {
-        props.getAuthUser()
-        props.getPacks(props.currentPage, props.pagesSize)
+        // props.getAuthUser()
+        props.getPacks({page:props.currentPage, pageCount:props.pagesSize})
 
     }, [])
 
 
     const onPageChanged = (pageNumber: number) => {
         // '6092ea40f1101a5af084112b'
-        props.getPacks(pageNumber, props.pagesSize)
+        props.getPacks({page:pageNumber, pageCount:props.pagesSize})
     }
 
-    const isMyPacksHandler = (checked:boolean) => {
+
+    const isMyPacksHandler = (checked: boolean) => {
         props.setIsMyPack()
-        const user_id = checked?props.userId:''
-        props.getPacks(props.currentPage, props.pagesSize, user_id)
+        debugger
+        const user_id = checked ? props.userId : ''
+        // props.getPacks(props.currentPage, props.pagesSize, user_id)
+        props.getPacks({user_id})
+    }
+
+    const changeFilterHandler = (min:number, max:number, packName:string) => {
+        props.getPacks({max, min, packName})
     }
 
 
@@ -45,14 +52,17 @@ const PacksContainer: React.FC<any> = (props) => {
         <Packs
             cardPacks={props.cardPacks}
             cardPacksTotalCount={props.cardPacksTotalCount}
-            currentPage={props.currentPage}
-            pagesSize={props.pagesSize}
+            currentPage={props.currentPage} //currentPage
+            pagesSize={props.pagesSize} //pagesSize
             onPageChanged={onPageChanged}
             addCardsPack={props.addPack}
             deleteCardsPack={props.deletePack}
             updateCardsPack={props.updatePack}
             isMyPacksHandler={isMyPacksHandler}
             isMyPacks={props.isMyPacks}
+            maxCardsCount={props.maxCardsCount}
+            minCardsCount={props.minCardsCount}
+            changeFilter = {changeFilterHandler}
         />
     </div>
 }
@@ -64,17 +74,19 @@ let mapStateToProps = (state: AppStateType) => {
         cardPacksTotalCount: state.cardPacks.cardPacksTotalCount,
         currentPage: state.cardPacks.page,
         userId: state.auth._id,
-        isMyPacks: state.cardPacks.isMyPacks
+        isMyPacks: state.cardPacks.isMyPacks,
+        maxCardsCount: state.cardPacks.maxCardsCount,
+        minCardsCount: state.cardPacks.minCardsCount,
     }
 }
 
 export default connect(mapStateToProps, {
     setCurrentPage: setCurrentPage,
-    getPacks: getPacksTC,
+    getPacks: getPacksReqTC,
     addPack: addCardsPack,
     deletePack: deleteCardsPack,
     updatePack: updateCardsPack,
     setIsMyPack: setIsMyPack,
-    getAuthUser:getAuthUserDataTC
+    getAuthUser: getAuthUserDataTC
 })(PacksContainer)
 

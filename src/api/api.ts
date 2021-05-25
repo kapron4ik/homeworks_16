@@ -1,4 +1,7 @@
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../redux/store";
+import {PacksReqType, PacksType} from "../types/entities";
 
 const instance = axios.create({
     // baseURL: 'http://localhost:7542/2.0/',
@@ -45,10 +48,11 @@ const cardsPack = {
 }
 
 export const packsAPI = {
-    getPacks(page: number = 1, pageSize: number = 20, user_id?:string) {
+    // getPacks(page: number = 1, pageSize: number = 20, user_id?:string) {
+    getPacks(data:PacksReqType) {
         // return instance.get(`/cards/pack?page=${page}&pageCount=${pageSize}`)
         // return instance.get( '/cards/pack', {params:{page:page,pageCount:pageSize,user_id:user_id}})
-        return instance.get( '/cards/pack', {params:{page:page,pageCount:pageSize,user_id:user_id}})
+        return instance.get( '/cards/pack', {params:{...data}})
     },
     addPack() {
         return instance.post('/cards/pack', {cardsPack})
@@ -88,3 +92,7 @@ export const cardsAPI = {
     }
 }
 
+// Types
+type PacksTypes = {
+
+}
