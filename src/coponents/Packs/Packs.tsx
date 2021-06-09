@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 // import {CardPacksType} from "../../redux/packs-reducer";
 import s from "./Packs.module.css"
 import {PATH} from "../../Routes";
@@ -8,8 +8,11 @@ import Pagination from '@material-ui/lab/Pagination';
 import SuperDoubleRange from "../common/c8-SuperDoubleRange/SuperDoubleRange";
 import {loginTC} from "../../redux/auth-reducer";
 import SuperButton from "../common/c2-SuperButton/SuperButton";
-import {CardsType, PacksType} from "../../types/entities";
+import {CardReqType, CardResType, CardsType, NewPackType, PacksReqType, PacksType} from "../../types/entities";
 import SuperInputText from "../common/c1-SuperInputText/SuperInputText";
+import Preloader from "../common/Preloader/Preloader";
+import ModalContainer from "../Modals/ModalContainer";
+import ModalEducationContainer from "../Modals/ModalEducation/ModalEducationContainer";
 
 
 type PropsType = {
@@ -18,14 +21,20 @@ type PropsType = {
     currentPage: number
     pagesSize: number
     onPageChanged: (pageNumber: number) => void
-    addCardsPack: () => void
+    addCardsPack: (data: NewPackType) => void
     deleteCardsPack: (id: string) => void
-    updateCardsPack: (id: string) => void
+    updateCardsPack: (id: string, packName: string) => void
     maxCardsCount: number
     minCardsCount: number
     isMyPacksHandler: (checked: boolean) => void
     isMyPacks: boolean
-    changeFilter: (min: number, max: number, packName:string) => void
+    changeFilter: (data: PacksReqType) => void
+    loading: boolean
+    resetFilter: () => void
+    userId: string
+    reqUserID: string
+    getCards: (data: CardReqType) => void
+    cards: Array<CardResType>
 }
 
 // type PacksPropsType = PacksType & PropsType
@@ -34,6 +43,12 @@ export const Packs = (props: PropsType) => {
     // const [checked, setChecked] = useState<boolean>(false)
     const [value1, setValue1] = useState(props.minCardsCount);
     const [value2, setValue2] = useState(props.maxCardsCount);
+    const [showModalEducation, setShowModalEducation] = useState('')
+    // const [newPackName, setNewPackName] = useState('')
+    useEffect(() => {
+        setValue1(props.minCardsCount)
+        setValue2(props.maxCardsCount)
+    }, [props.minCardsCount, props.maxCardsCount])
     const [packName, setPackName] = useState('')
 
 
@@ -52,19 +67,27 @@ export const Packs = (props: PropsType) => {
     }
 
     const changeFilter = () => {
-        props.changeFilter(value1, value2, packName)
+        props.changeFilter({min: value1, max: value2, packName: packName})
+    }
+
+    const resetFilter = () => {
+        props.resetFilter()
+        setPackName('')
+    }
+
+    const addPackHandler = () => {
+        props.addCardsPack({name: packName})
+        setPackName('')
+
     }
 
 
     return <div>
-        <SuperCheckbox
-            checked={props.isMyPacks}
-            onChangeChecked={(checked) => props.isMyPacksHandler(checked)}>Мои колоды</SuperCheckbox>
         <div>
-            {/*{arrayPageCount.map(p => {*/}
-            {/*    return <span className={props.currentPage === p?s.selectedPage:''}*/}
-            {/*    onClick={()=>props.onPageChanged(p)} key={p}>{p}</span>*/}
-            {/*})}*/}
+            <span>Мой id:{props.reqUserID}</span>
+            <SuperCheckbox
+                checked={props.isMyPacks}
+                onChangeChecked={(checked) => props.isMyPacksHandler(checked)}>Мои колоды</SuperCheckbox>
             <Pagination count={pageCount} page={props.currentPage} onChange={handleChange} variant="outlined"
                         color="primary"/>
             <SuperDoubleRange
@@ -78,7 +101,8 @@ export const Packs = (props: PropsType) => {
             />
             <SuperButton
                 onClick={() => changeFilter()}>Применить</SuperButton>
-
+            <SuperButton
+                onClick={() => resetFilter()}>Reset</SuperButton>
 
 
         </div>
@@ -87,36 +111,65 @@ export const Packs = (props: PropsType) => {
         {/*    <span>TotalCount - {props.cardPacksTotalCount}</span>*/}
         {/*    <span>PageSize - {props.pagesSize}</span>*/}
         {/*</div>*/}
-        <table>
-            <tr>
-                <th>Name</th>
-                <th>CardsCount</th>
-                <th>Update</th>
-                <th>url</th>
-                <th>
-                    <button onClick={props.addCardsPack}>add</button>
-                </th>
-            </tr>
-            {
-                props.cardPacks.map(c => <tr key={c._id}>
-                    <th>{c.name}</th>
-                    <th>{c.cardsCount}</th>
-                    <th>{c.updated}</th>
-                    <th></th>
+        {props.loading
+            ? <Preloader/>
+            : <table>
+                <tr>
+                    <th>Name</th>
+                    <th>CardsCount</th>
+                    <th>Update</th>
+                    <th>url</th>
                     <th>
-                        <button onClick={() => {
-                            c._id && props.deleteCardsPack(c._id) //поменять тип??
-                        }}>del
-                        </button>
-                        <button onClick={() => {
-                            c._id && props.updateCardsPack(c._id) //поменять тип??
-                        }}>update
-                        </button>
-                        <NavLink to={`${PATH.CARDS}/${c._id}`}>Cards</NavLink>
+                        <ModalContainer name={'Добавить колоду'}>
+                            <h3>Добавить новую колоду</h3>
+                            <SuperInputText
+                                value={packName}
+                                onChangeText={setPackName}
+                                placeholder={'название колоды'}/>
+                            <SuperButton
+                                onClick={addPackHandler}>Добавить</SuperButton>
+                        </ModalContainer>
                     </th>
-                </tr>)
-            }
-        </table>
+                </tr>
+                {
+                    props.cardPacks.map(c => <tr key={c._id}>
+                        <th>{c.name}</th>
+                        <th>{c.cardsCount}</th>
+                        <th>{c.updated}</th>
+                        <th></th>
+                        <th>
+                            <ModalContainer name={'Delete'}
+                                            disabled={c.user_id !== props.userId ? true : false}>
+                                <h3>Вы действительно хотите удалить колоду и все ее содержимое?</h3>
+                                <SuperButton
+                                    onClick={() => c._id && props.deleteCardsPack(c._id)}>Применить</SuperButton>
+                            </ModalContainer>
+                            <ModalContainer name={'Update'}
+                                            disabled={c.user_id !== props.userId ? true : false}>
+                                <h3>Обновить название колоды</h3>
+                                <SuperInputText
+                                    value={packName}
+                                    onChangeText={setPackName}
+                                    placeholder={'новое название колоды'}/>
+                                <SuperButton
+                                    onClick={() => c._id && props.updateCardsPack(c._id, packName)}>Применить</SuperButton>
+                            </ModalContainer>
+
+                            <NavLink to={`${PATH.CARDS}/${c._id}`}>Cards</NavLink>
+
+                            {/*<NavLink to={`${PATH.LEARN}/${c._id}`}>Learn</NavLink>*/}
+                            <SuperButton
+                                onClick={() =>c._id &&  setShowModalEducation(c._id)}>Обучение</SuperButton>
+                            {showModalEducation === c._id?
+                                c._id && <ModalEducationContainer idPack={c._id} isClose={setShowModalEducation} getCards={props.getCards}/>
+                            :''}
+
+
+
+                        </th>
+                    </tr>)
+                }
+            </table>}
 
 
     </div>

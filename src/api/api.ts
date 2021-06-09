@@ -1,7 +1,8 @@
 import axios from "axios";
 import {useSelector} from "react-redux";
+import { TokenType } from "../redux/recoveryPass-reducer";
 import {AppStateType} from "../redux/store";
-import {PacksReqType, PacksType} from "../types/entities";
+import {CardReqType, NewPackType, PacksReqType, PacksType} from "../types/entities";
 
 const instance = axios.create({
     // baseURL: 'http://localhost:7542/2.0/',
@@ -28,11 +29,13 @@ export const authAPI = {
             message:
                 `<div style="background-color: lime; padding: 15px"> +
                 password recovery link:
-                <a href='http://localhost:3000/#/set-new-password/$token$'>link</a></div>`
+                <a href='http://localhost:3000/#/enter_new_password/$token$'>link</a></div>`//Поменять на сервер
         });
     },
-    setPass() {
-        return
+    setNewPass(password: string, resetPasswordToken: TokenType) {
+        return instance.post<ResponseType>('set-new-password', {
+            password,
+            resetPasswordToken});
     }
 }
 
@@ -54,26 +57,30 @@ export const packsAPI = {
         // return instance.get( '/cards/pack', {params:{page:page,pageCount:pageSize,user_id:user_id}})
         return instance.get( '/cards/pack', {params:{...data}})
     },
-    addPack() {
-        return instance.post('/cards/pack', {cardsPack})
+    addPack(data:NewPackType) {
+        return instance.post('/cards/pack', {cardsPack:{...data}})
     },
     deletePack(id: string) {
         return instance.delete(`/cards/pack?id=${id}`)
     },
-    updatePack(id: string) {
+    updatePack(id: string, newNamePack: string) {
         return instance.put('/cards/pack', {
             cardsPack: {
                 _id: id,
-                name: "Update NEW name"
+                name: newNamePack
             }
         })
     }
 }
 
 export const cardsAPI = {
-    getCards(page:number, pageSize:number, cardsPack_id:string){
+    // getCards(page:number, pageSize:number, cardsPack_id:string){
+    //     // return instance.get( `/cards/card?cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageSize}`)
+    //     return instance.get( '/cards/card', {params:{cardsPack_id:cardsPack_id,page:page,pageCount:pageSize}})
+    // },
+    getCards(data:CardReqType){
         // return instance.get( `/cards/card?cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageSize}`)
-        return instance.get( '/cards/card', {params:{cardsPack_id:cardsPack_id,page:page,pageCount:pageSize}})
+        return instance.get( '/cards/card', {params:{...data}})
     },
     addCards(cardsPack_id:string){
         return instance.post('/cards/card', {card:{
@@ -92,7 +99,21 @@ export const cardsAPI = {
     }
 }
 
+
+
+
 // Types
 type PacksTypes = {
 
+}
+
+type ResponseType = {
+    info: string
+    error: string
+}
+
+export enum ResultCodeStatuses {
+    Success = 0,
+    Error = 1,
+    Captcha = 10
 }

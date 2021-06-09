@@ -2,8 +2,9 @@ import {AppStateType} from "../../../redux/store";
 import {connect, useSelector} from "react-redux";
 import Cards from "./Cards";
 import {useEffect} from "react";
-import {addCard, deleteCard, getCards, updateCard, setCurrentPageCards, CardsType} from "../../../redux/card-reducer";
+import {addCard, deleteCard, updateCard, setCurrentPageCards, CardsType} from "../../../redux/card-reducer";
 import {useParams} from "react-router-dom";
+import {getCardReqTC} from "../../../redux/card-request-reducer";
 
 type PropsType = {
     cards: Array<CardsType>
@@ -19,14 +20,14 @@ type PropsType = {
 
 const CardsContainer: React.FC<any> = (props) => {
     const {id} = useParams<{ id?: string }>()
-
     useEffect(() => {
-        return props.getCards(props.currentPage, props.pagesSize, id)
+        return props.getCards({page:props.currentPage, pageCount:props.pagesSize, cardsPack_id:id})
+        // return props.getCards({page:props.currentPage, pageCount:props.pagesSize, cardsPack_id:'60a1d678f0aab80004e62a7d'})
     }, [])
 
 
     const onPageChanged = (pageNumber: number) => {
-        props.getCards(pageNumber, props.pagesSize, id)
+        props.getCards({page: pageNumber, pageCount: props.pagesSize, cardsPack_id:id})
     }
 
     const addCardHandler = () => {
@@ -68,7 +69,7 @@ let mapStateToProps = (state: AppStateType) => {
 
 export default connect(mapStateToProps, {
     setCurrentPage: setCurrentPageCards,
-    getCards: getCards,
+    getCards: getCardReqTC,
     addCard: addCard,
     deleteCard: deleteCard,
     updateCard: updateCard

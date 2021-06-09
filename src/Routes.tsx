@@ -9,6 +9,7 @@ import Test from "./coponents/Test/Test";
 import Error404 from "./coponents/404/Error404";
 import CardPacksContainer from "./coponents/Packs/PacksContainer";
 import CardsContainer from './coponents/Packs/Cards/CardsContainer';
+import EducationContainer from './coponents/Packs/Education/EducationContainer';
 
 export const PATH = {
     LOGIN: "/login",
@@ -18,7 +19,8 @@ export const PATH = {
     ENTER_NEW_PASSWORD: "/enter_new_password",
     TEST: "/test",
     CARD_PACKS: "/card_packs",
-    CARDS: "/cards"
+    CARDS: "/cards",
+    LEARN: "/learn"
 }
 
 const Routes = () => {
@@ -29,10 +31,11 @@ const Routes = () => {
             < Route path={PATH.REGISTRATION} render={() => <Registration/>}/>
             < Route path={PATH.PROFILE} render={() => <Profile/>}/>
             < Route path={PATH.RECOVERY_PASSWORD} render={() => <RecoveryPassword/>}/>
-            < Route path={PATH.ENTER_NEW_PASSWORD} render={() => <EnterNewPassword/>}/>
+            < Route path={PATH.ENTER_NEW_PASSWORD && (PATH.ENTER_NEW_PASSWORD  + '/:token')} render={() => <EnterNewPassword/>}/>
             < Route path={PATH.TEST} render={() => <Test/>}/>
             < Route path={PATH.CARD_PACKS} render={() => <CardPacksContainer/>}/>
             < Route path={PATH.CARDS && (PATH.CARDS + '/:id')} render={() => <CardsContainer/>}/>
+            < Route path={PATH.LEARN && (PATH.LEARN + '/:id')} render={() => <EducationContainer/>}/>
             < Route render={() => <Error404/>}/>
         </Switch>
     )

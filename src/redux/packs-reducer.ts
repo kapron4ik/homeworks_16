@@ -1,12 +1,15 @@
-import {CardsType, DispathActionType, PacksReqType, PacksType} from "../types/entities";
+import {CardsType, DispathActionType, NewPackType, PacksReqType, PacksType} from "../types/entities";
 import {packsAPI} from "../api/api";
 import {Dispatch} from "redux";
+import {setIsLoadingAC} from "./auth-reducer";
+import {getPacksReqTC} from "./packs-request-reducer";
+import {AppStateType} from "./store";
 
 
 const initialState = {
     cardPacks: [],
     cardPacksTotalCount: 14,//totalUsersCount
-    maxCardsCount: 4,
+    maxCardsCount: 6,
     minCardsCount: 0,
     page: 1, //currentPage
     pageCount: 40, //pagesSize
@@ -22,8 +25,6 @@ export const packsReducer = (state: PacksType = initialState, action: DispathAct
             return {...state, cardPacksTotalCount: action.cardPacksTotalCount}
         case "packs/SET_CURRENT_PAGE":
             return {...state, page: action.currentPage}
-        case "packs/SET_IS_MY_PACK":
-            return {...state, isMyPacks: !state.isMyPacks}
         // case "packs/SET_DATA_PACKS":
         //     return  {}
         default:
@@ -52,12 +53,6 @@ export const setCurrentPage = (currentPage: number) => {
     } as const
 }
 
-export const setIsMyPack = () => {
-    return {
-        type: "packs/SET_IS_MY_PACK",
-    } as const
-}
-
 // export const setDataPack = (data:PacksReqType) => {
 //     return{
 //         type: "packs/SET_DATA_PACKS"
@@ -68,6 +63,7 @@ export const setIsMyPack = () => {
 // export const getPacksTC = (page: number, pageCount: number, user_id:string) => (dispatch: Dispatch<DispathActionType>) => {
 //     packsAPI.getPacks({page, pageCount, user_id})
 export const getPacksTC = (data:PacksReqType) => (dispatch: Dispatch<DispathActionType>) => {
+
     packsAPI.getPacks({...data})
         .then((res) => {
             dispatch(setCardPacks(res.data.cardPacks))
@@ -76,26 +72,26 @@ export const getPacksTC = (data:PacksReqType) => (dispatch: Dispatch<DispathActi
         })
 }
 
-export const addCardsPack = () => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>) => void) => void) => {
-    packsAPI.addPack()
+export const addCardsPack = (data:NewPackType) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
+    packsAPI.addPack({...data})
         .then(() => {
-            dispatch(getPacksTC({page:initialState.page, pageCount:initialState.pageCount, user_id:initialState.user_id}))
+            dispatch(getPacksReqTC({}))
             // dispatch(setCardPacks(res.data.cardPacks))
             // dispatch(setTotalCardPacksCount(res.data.cardPacksTotalCount))
         })
 }
 
-export const deleteCardsPack = (id: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>) => void) => void) => {
+export const deleteCardsPack = (id: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>, getState:()=>AppStateType) => void) => void) => {
     packsAPI.deletePack(id)
         .then(() => {
-            dispatch(getPacksTC({}))
+            dispatch(getPacksReqTC({}))
         })
 }
 
-export const updateCardsPack = (id: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>) => void) => void) => {
-    packsAPI.updatePack(id)
+export const updateCardsPack = (id: string,newNamePack: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
+    packsAPI.updatePack(id, newNamePack)
         .then(() => {
-            dispatch(getPacksTC({}))
+            dispatch(getPacksReqTC({}))
         })
 }
 

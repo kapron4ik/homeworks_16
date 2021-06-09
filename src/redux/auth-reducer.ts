@@ -1,8 +1,9 @@
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {Dispatch} from "redux";
 import {authAPI} from "../api/api";
-import { PATH } from "../Routes";
-import {DispathActionType} from "../types/entities";
+import {PATH} from "../Routes";
+import {DispathActionType, NewPackType} from "../types/entities";
+import {AppStateType} from "./store";
 
 const initialState = {
     _id: '',
@@ -17,6 +18,7 @@ const initialState = {
     rememberMe: false,
     error: '',
     isLoggedIn: false,
+    isLoading: false
 }
 
 export const authReducer = (state: AuthStateType = initialState, action: DispathActionType): AuthStateType => {
@@ -25,7 +27,9 @@ export const authReducer = (state: AuthStateType = initialState, action: Dispath
         case 'login/SET-IS-LOGGED-IN':
             return {...state, ...action.payload}
         case 'login/ERROR':
-            return {...state, error:action.error}
+            return {...state, error: action.error}
+        case 'login/SET-IS-LOADING':
+            return {...state, isLoading: action.value}
         default:
             return state
     }
@@ -37,59 +41,67 @@ export const setAuthUserDataAC = (payload: AuthStateType) =>
 export const setErrorAC = (error: string) =>
     ({type: 'login/ERROR', error} as const)
 
-export const getAuthUserDataTC = () => (dispatch: Dispatch<DispathActionType>) => {
+export const setIsLoadingAC = (value: boolean) => {
+    return {
+        type: 'login/SET-IS-LOADING',
+        value
+    } as const
+}
 
+export const getAuthUserDataTC = () => (dispatch: Dispatch<DispathActionType>) => {
+    dispatch(setIsLoadingAC(true))
     authAPI.me()
         .then((res) => {
-            // console.log(res)
-            let {
-                _id, email, name, avatar,
-                publicCardPacksCount, created,
-                updated, isAdmin, verified,
-                rememberMe, error
-            } = res.data
-
-            dispatch(setAuthUserDataAC({
-                _id, email, name, avatar,
-                publicCardPacksCount, created,
-                updated, isAdmin, verified,
-                rememberMe, error, isLoggedIn: true
-            }))
+            dispatch(setAuthUserDataAC(res.data))
         })
-        .catch((res) => {
-            // console.log(res)
+        .catch((e) => {
+            const error = e.response
+                ? e.response.data.error
+                : (e.message + ', more details in the console');
+            dispatch(setErrorAC(error))
+            // @ts-ignore
+            window.location = "#/login"
         })
+        .finally(() => dispatch(setIsLoadingAC(false)))
 }
 
-export const loginTC = (email: string, pasword: string, rememberMe: boolean) => (dispatch: (authUserData: (dispatch: Dispatch<DispathActionType>) => void) => void) => {
-    // export const loginTC = (email: string, pasword: string, rememberMe: boolean) => (dispatch: Dispatch<DispathActionType>) => {
-    authAPI.login(email, pasword, rememberMe)
+export const loginTC = (email: string, password: string, rememberMe: boolean) => (dispatch: Dispatch<DispathActionType>) => {
+    dispatch(setIsLoadingAC(true))
+    authAPI.login(email, password, rememberMe)
         .then((res) => {
-            dispatch(getAuthUserDataTC())
+            dispatch(setAuthUserDataAC(res.data))
+            dispatch(setErrorAC(''))
             // @ts-ignore
             window.location = "#/profile"
-
         })
         .catch((e) => {
             const error = e.response
                 ? e.response.data.error
                 : (e.message + ', more details in the console');
+            dispatch(setErrorAC(error))
         })
-}
+        .finally(() => dispatch(setIsLoadingAC(false)))
 
+}
 export const registerTC = (email: string, pasword: string) => (dispatch: Dispatch<DispathActionType>) => {
+    dispatch(setIsLoadingAC(true))
     authAPI.register(email, pasword)
         .then((res) => {
-            console.log(res)
+            dispatch(setErrorAC(''))
+            // @ts-ignore
+            window.location = "#/login"
         })
         .catch((e) => {
             const error = e.response
                 ? e.response.data.error
                 : (e.message + ', more details in the console');
+            dispatch(setErrorAC(error))
         })
+        .finally(() => dispatch(setIsLoadingAC(false)))
 }
 
 export const logoutTC = () => (dispatch: Dispatch<DispathActionType>) => {
+    dispatch(setIsLoadingAC(true))
     authAPI.logout()
         .then((res) => {
             dispatch(setAuthUserDataAC({
@@ -104,15 +116,25 @@ export const logoutTC = () => (dispatch: Dispatch<DispathActionType>) => {
                 verified: false,
                 rememberMe: false,
                 error: '',
-                isLoggedIn: false
+                isLoggedIn: false,
+                isLoading: false
             }))
+            dispatch(setErrorAC(''))
             // @ts-ignore
             window.location = "#/login"
         })
+        .catch((e) => {
+            const error = e.response
+                ? e.response.data.error
+                : (e.message + ', more details in the console');
+            dispatch(setErrorAC(error))
+        })
+        .finally(() => dispatch(setIsLoadingAC(false)))
 }
 
 export const recoveryPasTC = (email: string) => {
     return (dispatch: Dispatch<DispathActionType>) => {
+        dispatch(setIsLoadingAC(true))
         authAPI.recoveryPass(email)
             .then((res) => {
                 console.log(res)
@@ -125,6 +147,7 @@ export const recoveryPasTC = (email: string) => {
                 // dispatch(setStatusAC('failed'))
 
             })
+        dispatch(setIsLoadingAC(false))
     }
 }
 
@@ -140,7 +163,8 @@ export type AuthStateType = {
     isAdmin: boolean,
     verified: boolean,
     rememberMe: boolean,
-    error?: string,
+    error: string,
     isLoggedIn: boolean
+    isLoading: boolean
 }
 

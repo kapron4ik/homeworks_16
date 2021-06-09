@@ -4,6 +4,7 @@ import {authReducer} from "./auth-reducer";
 import { packsReducer } from "./packs-reducer";
 import {cardsReducer} from "./card-reducer";
 import { packsReqReducer } from "./packs-request-reducer";
+import { cardReqReducer } from "./card-request-reducer";
 
 
 const rootReducer = combineReducers(
@@ -11,7 +12,8 @@ const rootReducer = combineReducers(
         auth: authReducer,
         cardPacks: packsReducer,
         cards: cardsReducer,
-        packsReq: packsReqReducer
+        packsReq: packsReqReducer,
+        cardReq:cardReqReducer
     }
 )
 
