@@ -23,7 +23,7 @@ type PropsType = {
 const CardsContainer: React.FC<any> = (props) => {
     const {id} = useParams<{ id?: string }>()
     useEffect(() => {
-        return props.getCards({cardsPack_id:id, page:props.currentPage, pageCount:props.pagesSize})
+        props.getCards({cardsPack_id:id, page:props.currentPage, pageCount:props.pagesSize})
     }, [])
 
     const onPageChanged = (pageNumber: number) => {

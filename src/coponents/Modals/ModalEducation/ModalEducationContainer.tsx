@@ -8,7 +8,6 @@ import {CardsType, updateGrade} from "../../../redux/cards-reducer";
 import SuperButton from "../../common/c2-SuperButton/SuperButton";
 
 //IsLoading при подключении сбрасывает модалки, но если в модалке UseEffect постоянно его перезапускает
-//Когда вызываю модалку с обучением показывает вопросы с предедущей колоды
 //Сбрасівается сортировка колод по количеству карт при заходе в колоду и віходе обратно
 //Не показівает 5 карту в колоде
 
@@ -39,16 +38,17 @@ const getCard = (cards: Array<CardResType>) => {
 
 const ModalEducationContainer: React.FC<PropsType> = (
     {
-
         idPack,
         isClose,
         getCards
         // cards
     }
 ) => {
+    debugger
     const dispatch = useDispatch();
     // const [showModal, setShowModal] = useState(false)
     const [showAnswer, setShowAnswer] = useState(false)
+    const [first, setFirst] = useState<boolean>(true);
     console.log(`idPack - ${idPack}`)
 
     const cards = useSelector<AppStateType, Array<CardsType>>(state => state.cards.cards)
@@ -68,11 +68,16 @@ const ModalEducationContainer: React.FC<PropsType> = (
         __v: 0,
         _id: '',
     })
+    console.log(`card - ${card}`)
 
     useEffect(() => {
-        getCards({cardsPack_id: idPack})
-        setCard(getCard(cards))
-    }, [])
+        // getCards({cardsPack_id: idPack})
+        if (first) {
+            getCards({cardsPack_id: idPack})
+            setFirst(false)
+        }
+        if (cards.length > 0) {setCard(getCard(cards))}
+    }, [idPack, cards, first])
 
     const showModalHandler = (value: boolean) => {
         return value ? '' : isClose('')
@@ -85,12 +90,25 @@ const ModalEducationContainer: React.FC<PropsType> = (
 
     const setGrade = (grade: number) => {
         dispatch(updateGrade(grade, card._id))
+        setCard({
+            answer: '',
+            question: '',
+            cardsPack_id: '',
+            grade: 0,
+            rating: 0,
+            shots: 0,
+            type: '',
+            user_id: '',
+            created: '',
+            updated: '',
+            __v: 0,
+            _id: '',
+        })
+        setShowAnswer (false)
     }
 
     return <>
-        <Modal
-            showModal={showModalHandler}>
-            <h3>Test</h3>
+        <Modal showModal={showModalHandler}>
             <h3>{card.question}</h3>
             {showAnswer
                 ? <>

@@ -28,9 +28,9 @@ export const cardsReqReducer = (state: CardsReqType = initialState, action: Disp
                 cardQuestion: '',
                 cardsPack_id: '',
                 min: 1,
-                max: 4,
+                max: 5,
                 sortCards: '',
-                page: 2,
+                page: 1,
                 pageCount: 8
             }
         default:
