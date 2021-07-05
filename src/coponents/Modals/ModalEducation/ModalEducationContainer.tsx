@@ -8,8 +8,7 @@ import {CardsType, updateGrade} from "../../../redux/cards-reducer";
 import SuperButton from "../../common/c2-SuperButton/SuperButton";
 
 //IsLoading при подключении сбрасывает модалки, но если в модалке UseEffect постоянно его перезапускает
-//Сбрасівается сортировка колод по количеству карт при заходе в колоду и віходе обратно
-//Не показівает 5 карту в колоде
+//2.Не показівает 5 карту в колоде
 
 type PropsType = {
 

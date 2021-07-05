@@ -63,7 +63,7 @@ export const setIsMyPack = (checked:boolean, userId: string) => {
 
 //Thunk
 export const getPacksReqTC = (data: PacksReqType) => (dispatch: Dispatch<DispathActionType>, getState:()=>AppStateType) => {
-    // dispatch(setDataPack(data))
+    dispatch(setDataPack(data))
    const state  = getState().packsReq
     dispatch(setIsLoadingAC(true))
     // const userId = initialState.isMyPacks?initialState.user_id:''
