@@ -37,10 +37,10 @@ const EnterNewPassword: React.FC<any> = (props) => {
     }
 
     return <div className={s.wrapper}>
-        <h1>Enter new password</h1>
         {loading
             ? <Preloader/>
             : <>
+                <h1>Enter new password</h1>
                 <SuperInputText
                     value={password}
                     type={'password'}

@@ -43,6 +43,19 @@ export const correctConfPassword = (value: string, confPassword: string) => {
     }
 }
 
+export const isEmail = (val: string) => {
+    let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (regEmail.test(val)) {
+        // setErrorEmail('')
+        // return true
+        return ''
+    } else {
+        // setErrorEmail('не корректный email')
+        // return false
+        return 'не корректный email'
+    }
+}
+
 const Registration: React.FC<any> = (props) => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -56,16 +69,7 @@ const Registration: React.FC<any> = (props) => {
     const validation = [email !== '', password !== '', confPassword !== '', errorEmail === '', errorPass === '', errorConfPass === '']
     const dispatch = useDispatch()
 
-    const isEmail = (val: string) => {
-        let regEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (regEmail.test(val)) {
-            setErrorEmail('')
-            return true
-        } else {
-            setErrorEmail('не корректный email')
-            return false
-        }
-    }
+
 
     const onRegistrationHandler = () => {
         dispatch(registerTC(email, password))
@@ -73,7 +77,7 @@ const Registration: React.FC<any> = (props) => {
 
     const onChangeEmailHandler = (value: string) => {
         setEmail(value)
-        isEmail(value)
+        setErrorEmail(isEmail(value))
     }
 
     const onChangePasswordHandler = (value: string) => {

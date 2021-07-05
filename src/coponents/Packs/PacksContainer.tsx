@@ -9,8 +9,8 @@ import Packs from "./Packs";
 import {useEffect} from "react";
 import {getAuthUserDataTC} from "../../redux/auth-reducer";
 import {getPacksReqTC, resetDataPack, setIsMyPack} from "../../redux/packs-request-reducer";
-import {CardReqType, NewPackType, PacksReqType} from "../../types/entities";
-import { getCardReqTC } from "../../redux/card-request-reducer";
+import {CardReqType, CardsReqType, NewPackType, PacksReqType} from "../../types/entities";
+import { getCardsReqTC } from "../../redux/cards-request-reducer";
 
 
 // type PropsType = {
@@ -62,7 +62,7 @@ const PacksContainer: React.FC<any> = (props) => {
         props.getPacks(data)
     }
 
-    const getCardsHandler = (data: CardReqType) => {
+    const getCardsHandler = (data: CardsReqType) => {
         props.getCards(data)
     }
 
@@ -128,6 +128,6 @@ export default connect(mapStateToProps, {
     setIsMyPack: setIsMyPack,
     getAuthUser: getAuthUserDataTC,//VV
     resetFilter: resetDataPack,//VV
-    getCards: getCardReqTC
+    getCards: getCardsReqTC
 })(PacksContainer)
 

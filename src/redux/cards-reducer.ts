@@ -1,17 +1,17 @@
-import {DispathActionType} from "../types/entities";
+import {CardReqType, DispathActionType} from "../types/entities";
 import {cardsAPI, packsAPI} from "../api/api";
 import {Dispatch} from "redux";
-import { getCardReqTC } from "./card-request-reducer";
+import { getCardsReqTC } from "./cards-request-reducer";
 import {AppStateType} from "./store";
 
 
 const initialState = {
     cards: [],
-    cardsTotalCount: 3,
+    cardsTotalCount: 18,
     maxGrade: 4.987525071790364,
     minGrade: 2.0100984354076568,
     page: 1,
-    pageCount: 15,
+    pageCount: 10,
     packUserId: "5eecf82a3ed8f700042f1186"
 }
 
@@ -59,28 +59,35 @@ export const setCurrentPageCards = (currentPage: number) => {
 //         })
 // }
 
-export const addCard = (cardsPack_id:string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
-    cardsAPI.addCards(cardsPack_id)
+export const addCard = (data:CardReqType) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
+    cardsAPI.addCards(data)
         .then(()=>{
             // dispatch(getCards(initialState.page,initialState.pageCount,cardsPack_id))
-            dispatch(getCardReqTC({}))
+            dispatch(getCardsReqTC({}))
 
         })
 }
 
-export const deleteCard = (id:string,cardsPack_id:string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
+export const deleteCard = (id:string,cardsPack_id:string) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
     cardsAPI.deleteCards(id)
         .then(()=>{
             // dispatch(getCards(initialState.page,initialState.pageCount,cardsPack_id))
-            dispatch(getCardReqTC({}))
+            dispatch(getCardsReqTC({}))
         })
 }
 
-export const updateCard = (id:string, cardsPack_id:string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
-    cardsAPI.updateCards(id)
+export const updateCard = (data:CardReqType) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
+    cardsAPI.updateCards(data)
         .then(()=>{
             // dispatch(getCards(initialState.page,initialState.pageCount,cardsPack_id))
-            dispatch(getCardReqTC({}))
+            dispatch(getCardsReqTC({}))
+        })
+}
+
+export const updateGrade = (grade: number, cardId: string) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
+    cardsAPI.updateGrade(grade, cardId)
+        .then(()=>{
+            dispatch(getCardsReqTC({}))
         })
 }
 

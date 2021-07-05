@@ -31,11 +31,12 @@ const Routes = () => {
             < Route path={PATH.REGISTRATION} render={() => <Registration/>}/>
             < Route path={PATH.PROFILE} render={() => <Profile/>}/>
             < Route path={PATH.RECOVERY_PASSWORD} render={() => <RecoveryPassword/>}/>
-            < Route path={PATH.ENTER_NEW_PASSWORD && (PATH.ENTER_NEW_PASSWORD  + '/:token')} render={() => <EnterNewPassword/>}/>
+            {/*< Route path={PATH.ENTER_NEW_PASSWORD || (PATH.ENTER_NEW_PASSWORD  + '/:token')} render={() => <EnterNewPassword/>}/>*/}
+            < Route path={`${PATH.ENTER_NEW_PASSWORD}/:token`} render={() => <EnterNewPassword/>}/>
             < Route path={PATH.TEST} render={() => <Test/>}/>
             < Route path={PATH.CARD_PACKS} render={() => <CardPacksContainer/>}/>
-            < Route path={PATH.CARDS && (PATH.CARDS + '/:id')} render={() => <CardsContainer/>}/>
-            < Route path={PATH.LEARN && (PATH.LEARN + '/:id')} render={() => <EducationContainer/>}/>
+            < Route path={`${PATH.CARDS}/:id`} render={() => <CardsContainer/>}/>
+            {/*< Route path={PATH.LEARN || (PATH.LEARN + '/:id')} render={() => <EducationContainer/>}/>*/}
             < Route render={() => <Error404/>}/>
         </Switch>
     )

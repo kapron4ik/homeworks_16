@@ -1,14 +1,20 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-// import {CardPacksType} from "../../redux/packs-reducer";
 import s from "./Packs.module.css"
 import {PATH} from "../../Routes";
 import {NavLink} from "react-router-dom";
 import SuperCheckbox from "../common/c3-SuperCheckbox/SuperCheckbox";
 import Pagination from '@material-ui/lab/Pagination';
 import SuperDoubleRange from "../common/c8-SuperDoubleRange/SuperDoubleRange";
-import {loginTC} from "../../redux/auth-reducer";
 import SuperButton from "../common/c2-SuperButton/SuperButton";
-import {CardReqType, CardResType, CardsType, NewPackType, PacksReqType, PacksType} from "../../types/entities";
+import {
+    CardReqType,
+    CardResType,
+    CardsReqType,
+    CardsType,
+    NewPackType,
+    PacksReqType,
+    PacksType
+} from "../../types/entities";
 import SuperInputText from "../common/c1-SuperInputText/SuperInputText";
 import Preloader from "../common/Preloader/Preloader";
 import ModalContainer from "../Modals/ModalContainer";
@@ -33,7 +39,7 @@ type PropsType = {
     resetFilter: () => void
     userId: string
     reqUserID: string
-    getCards: (data: CardReqType) => void
+    getCards: (data: CardsReqType) => void
     cards: Array<CardResType>
 }
 
@@ -78,9 +84,7 @@ export const Packs = (props: PropsType) => {
     const addPackHandler = () => {
         props.addCardsPack({name: packName})
         setPackName('')
-
     }
-
 
     return <div>
         <div>
@@ -103,14 +107,7 @@ export const Packs = (props: PropsType) => {
                 onClick={() => changeFilter()}>Применить</SuperButton>
             <SuperButton
                 onClick={() => resetFilter()}>Reset</SuperButton>
-
-
         </div>
-        {/*<div>*/}
-        {/*    <span>Page - {props.currentPage}</span>*/}
-        {/*    <span>TotalCount - {props.cardPacksTotalCount}</span>*/}
-        {/*    <span>PageSize - {props.pagesSize}</span>*/}
-        {/*</div>*/}
         {props.loading
             ? <Preloader/>
             : <table>
@@ -159,7 +156,8 @@ export const Packs = (props: PropsType) => {
 
                             {/*<NavLink to={`${PATH.LEARN}/${c._id}`}>Learn</NavLink>*/}
                             <SuperButton
-                                onClick={() =>c._id &&  setShowModalEducation(c._id)}>Обучение</SuperButton>
+                                onClick={() =>c._id &&  setShowModalEducation(c._id)}
+                                disabled={c.cardsCount === 0 ? true : false}>Обучение</SuperButton>
                             {showModalEducation === c._id?
                                 c._id && <ModalEducationContainer idPack={c._id} isClose={setShowModalEducation} getCards={props.getCards}/>
                             :''}

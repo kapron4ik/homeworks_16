@@ -1,10 +1,11 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunk from "redux-thunk";
 import {authReducer} from "./auth-reducer";
-import { packsReducer } from "./packs-reducer";
-import {cardsReducer} from "./card-reducer";
-import { packsReqReducer } from "./packs-request-reducer";
-import { cardReqReducer } from "./card-request-reducer";
+import {packsReducer} from "./packs-reducer";
+import {cardsReducer} from "./cards-reducer";
+import {packsReqReducer} from "./packs-request-reducer";
+import {cardsReqReducer} from "./cards-request-reducer";
+import {recoveryPasReducer} from "./recoveryPass-reducer";
 
 
 const rootReducer = combineReducers(
@@ -13,7 +14,8 @@ const rootReducer = combineReducers(
         cardPacks: packsReducer,
         cards: cardsReducer,
         packsReq: packsReqReducer,
-        cardReq:cardReqReducer
+        cardsReq: cardsReqReducer,
+        recoveryPas: recoveryPasReducer
     }
 )
 

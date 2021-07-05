@@ -1,4 +1,5 @@
 {
+  "homepage": "http://kapron4ik.github.io/homeworks_16",
   "name": "homeworks_16",
   "version": "0.1.0",
   "private": true,
@@ -22,12 +23,12 @@
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-scroll": "^1.8.2",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
-  "homepage": "https://kapron4ik.github.io/homeworks_16",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

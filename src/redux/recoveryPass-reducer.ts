@@ -9,7 +9,7 @@ export type StatusRequestType = 'succeeded' | 'failed' | null
 
 const initialState = {
     email: '' as string,
-    error: null as RequestErrorType,
+    // error: null as RequestErrorType,
     statusRequest: null as StatusRequestType,
 }
 
@@ -40,10 +40,10 @@ export const recoveryPasTC = (email: string) => (dispatch: Dispatch<DispathActio
     authAPI.recoveryPass(email)
         .then((res) => {
             dispatch(recoveryPasAC(email))
-            // dispatch(setStatusAC('succeeded'))
+            dispatch(setStatusAC('succeeded'))
         })
         .catch((e) => {
-            // dispatch(setStatusAC('failed'))
+            dispatch(setStatusAC('failed'))
             const error = e.response
                 ? e.response.data.error
                 : (e.message + ', more details in the console');

@@ -16,7 +16,8 @@
     transform: translate(-50%, -50%);
     display: flex;
     width: 600px;
-    height: 400px;
+    min-height: 400px;
+    padding: 20px;
     flex-flow: column;
     align-items: center;
     justify-content: center;

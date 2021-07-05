@@ -48,7 +48,6 @@ export const setDataPack = (data: PacksReqType) => {
 }
 
 export const resetDataPack = () => {
-    debugger
     return {
         type: "packs-req/RESET_DATA_PACKS",
     } as const

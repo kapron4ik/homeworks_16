@@ -2,11 +2,11 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 import { TokenType } from "../redux/recoveryPass-reducer";
 import {AppStateType} from "../redux/store";
-import {CardReqType, NewPackType, PacksReqType, PacksType} from "../types/entities";
+import {CardReqType, CardsReqType, NewPackType, PacksReqType, PacksType} from "../types/entities";
 
 const instance = axios.create({
-    // baseURL: 'http://localhost:7542/2.0/',
-    baseURL: 'https://neko-back.herokuapp.com/2.0',
+    baseURL: 'http://localhost:7542/2.0/',
+    // baseURL: 'https://neko-back.herokuapp.com/2.0',
     withCredentials: true
 })
 
@@ -39,22 +39,19 @@ export const authAPI = {
     }
 }
 
-const cardsPack = {
-    name: "My new cards pack",
-    path: "/def",
-    grade: 0,
-    shots: 0,
-    rating: 0,
-    deckCover: "url or base64",
-    private: false,
-    type: "pack"
-}
+// const cardsPack = {
+//     name: "My new cards pack",
+//     path: "/def",
+//     grade: 0,
+//     shots: 0,
+//     rating: 0,
+//     deckCover: "url or base64",
+//     private: false,
+//     type: "pack"
+// }
 
 export const packsAPI = {
-    // getPacks(page: number = 1, pageSize: number = 20, user_id?:string) {
     getPacks(data:PacksReqType) {
-        // return instance.get(`/cards/pack?page=${page}&pageCount=${pageSize}`)
-        // return instance.get( '/cards/pack', {params:{page:page,pageCount:pageSize,user_id:user_id}})
         return instance.get( '/cards/pack', {params:{...data}})
     },
     addPack(data:NewPackType) {
@@ -74,38 +71,29 @@ export const packsAPI = {
 }
 
 export const cardsAPI = {
-    // getCards(page:number, pageSize:number, cardsPack_id:string){
-    //     // return instance.get( `/cards/card?cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageSize}`)
-    //     return instance.get( '/cards/card', {params:{cardsPack_id:cardsPack_id,page:page,pageCount:pageSize}})
-    // },
-    getCards(data:CardReqType){
-        // return instance.get( `/cards/card?cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageSize}`)
+
+    getCards(data:CardsReqType){
         return instance.get( '/cards/card', {params:{...data}})
     },
-    addCards(cardsPack_id:string){
-        return instance.post('/cards/card', {card:{
-                cardsPack_id: cardsPack_id
-            }})
+    addCards(data:CardReqType){
+        return instance.post('/cards/card', {card:{...data}})
     },
     deleteCards(id:string){
         return instance.delete(`/cards/card?id=${id}`)
     },
-    updateCards(id:string){
-        return instance.put('/cards/card', {card:{
-                _id: id,
-                question:'new question',
-                answer:'new answer'
-            }})
+    updateCards(data:CardReqType){
+        return instance.put('/cards/card', {card:{...data}})
+    },
+    updateGrade (grade: number, cardId: string){
+        return instance.put('/cards/grade', {grade, card_id:cardId})
     }
 }
 
 
-
-
 // Types
-type PacksTypes = {
-
-}
+// type PacksTypes = {
+//
+// }
 
 type ResponseType = {
     info: string

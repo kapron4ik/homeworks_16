@@ -12,7 +12,7 @@ const initialState = {
     maxCardsCount: 6,
     minCardsCount: 0,
     page: 1, //currentPage
-    pageCount: 40, //pagesSize
+    pageCount: 20, //pagesSize
     isMyPacks: false,
     user_id: ''
 }
@@ -72,7 +72,7 @@ export const getPacksTC = (data:PacksReqType) => (dispatch: Dispatch<DispathActi
         })
 }
 
-export const addCardsPack = (data:NewPackType) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
+export const addCardsPack = (data:NewPackType) => (dispatch: (getPacksReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
     packsAPI.addPack({...data})
         .then(() => {
             dispatch(getPacksReqTC({}))
@@ -81,14 +81,14 @@ export const addCardsPack = (data:NewPackType) => (dispatch: (getCardPacks: (dis
         })
 }
 
-export const deleteCardsPack = (id: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>, getState:()=>AppStateType) => void) => void) => {
+export const deleteCardsPack = (id: string) => (dispatch: (getPacksReqTC: (dispatch: Dispatch<DispathActionType>, getState:()=>AppStateType) => void) => void) => {
     packsAPI.deletePack(id)
         .then(() => {
             dispatch(getPacksReqTC({}))
         })
 }
 
-export const updateCardsPack = (id: string,newNamePack: string) => (dispatch: (getCardPacks: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
+export const updateCardsPack = (id: string,newNamePack: string) => (dispatch: (getPacksReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void) => {
     packsAPI.updatePack(id, newNamePack)
         .then(() => {
             dispatch(getPacksReqTC({}))

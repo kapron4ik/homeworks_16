@@ -1,9 +1,9 @@
 import {AppStateType} from "../../../redux/store";
 import {connect, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {addCard, deleteCard, updateCard, setCurrentPageCards, CardsType} from "../../../redux/card-reducer";
+import {addCard, deleteCard, updateCard, setCurrentPageCards, CardsType} from "../../../redux/cards-reducer";
 import {useParams} from "react-router-dom";
-import {getCardReqTC} from "../../../redux/card-request-reducer";
+import {getCardsReqTC} from "../../../redux/cards-request-reducer";
 import ModalEducationContainer from "../../Modals/ModalEducation/ModalEducationContainer";
 import Modal from "../../Modals/Modal";
 
@@ -45,6 +45,6 @@ let mapStateToProps = (state: AppStateType) => {
 
 export default connect(mapStateToProps, {
     setCurrentPage: setCurrentPageCards,
-    getCards: getCardReqTC,
+    getCards: getCardsReqTC,
 })(EducationContainer)
 
