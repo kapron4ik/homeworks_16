@@ -21,7 +21,6 @@ export type CardsPropsType = {
     loading: boolean
 }
 
-
 export const Cards = (props: CardsPropsType) => {
     const [cardQuestion, setCardQuestion] = useState('')
     const [cardAnswer, setCardAnswer] = useState('')
@@ -30,7 +29,6 @@ export const Cards = (props: CardsPropsType) => {
     for (let i = 1; i <= pageCount; i++) {
         arrayPageCount.push(i)
     }
-
 
     const addCardHandler = () => {
         props.addCard({
@@ -50,9 +48,11 @@ export const Cards = (props: CardsPropsType) => {
         setCardAnswer('')
     }
 
+
     const handleChange = (event: React.FormEvent<EventTarget>, value: number) => {
         props.onPageChanged(value)
     };
+
 
     return <div>
         <div>
@@ -73,7 +73,7 @@ export const Cards = (props: CardsPropsType) => {
                     <th>Update</th>
                     <th>URL</th>
                     <th>
-                        <ModalContainer name={'Добавить колоду'}>
+                        <ModalContainer name={'Добавить карту'}>
                             <h3>Добавить новую карту</h3>
                             <SuperInputText
                                 value={cardQuestion}
@@ -102,7 +102,11 @@ export const Cards = (props: CardsPropsType) => {
                                 <SuperButton
                                     onClick={() => c._id && props.deleteCard(c._id)}>Применить</SuperButton>
                             </ModalContainer>
-                            <ModalContainer name={'Update'}>
+                            <ModalContainer name={'Update'}
+                                            cardQuestion = {c.question}
+                                            setCardQuestion = {setCardQuestion}
+                                            cardAnswer = {c.answer}
+                                            setCardAnswer = {setCardAnswer}>
                                 <h3>Изменить карту</h3>
                                 <SuperInputText
                                     value={cardQuestion}

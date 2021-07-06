@@ -8,7 +8,9 @@ import {CardsType, updateGrade} from "../../../redux/cards-reducer";
 import SuperButton from "../../common/c2-SuperButton/SuperButton";
 
 //IsLoading при подключении сбрасывает модалки, но если в модалке UseEffect постоянно его перезапускает
-//2.Не показівает 5 карту в колоде
+//Скорректировать в модальніх окнах название для паков и карт
+//Увеличить размері инпутов в модальніх окнах
+//покрасить приложение
 
 type PropsType = {
 
@@ -43,7 +45,6 @@ const ModalEducationContainer: React.FC<PropsType> = (
         // cards
     }
 ) => {
-    debugger
     const dispatch = useDispatch();
     // const [showModal, setShowModal] = useState(false)
     const [showAnswer, setShowAnswer] = useState(false)
@@ -103,7 +104,8 @@ const ModalEducationContainer: React.FC<PropsType> = (
             __v: 0,
             _id: '',
         })
-        setShowAnswer (false)
+        onNext()
+        // setShowAnswer (false)
     }
 
     return <>

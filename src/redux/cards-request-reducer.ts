@@ -12,7 +12,7 @@ const initialState = {
     cardQuestion: '',
     cardsPack_id: '',
     min: 0,
-    max: 4,
+    max: 5,
     sortCards: '0grade', //0grade
     page: 1,
     pageCount: 7
@@ -27,7 +27,7 @@ export const cardsReqReducer = (state: CardsReqType = initialState, action: Disp
                 cardAnswer: '',
                 cardQuestion: '',
                 cardsPack_id: '',
-                min: 1,
+                min: 0,
                 max: 5,
                 sortCards: '',
                 page: 1,
@@ -61,7 +61,7 @@ export const getCardsReqTC = (data: CardsReqType) => (dispatch: Dispatch<Dispath
             dispatch(setCards(res.data.cards))
             dispatch(setCurrentPageCards(res.data.page))
             dispatch(setTotalCardsCount(res.data.cardsTotalCount))
-            // dispatch(setIsLoadingAC(false))
+            dispatch(setIsLoadingAC(false))
         })
 }
 

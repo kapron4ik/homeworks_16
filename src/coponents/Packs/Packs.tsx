@@ -50,7 +50,6 @@ export const Packs = (props: PropsType) => {
     const [value1, setValue1] = useState(props.minCardsCount);
     const [value2, setValue2] = useState(props.maxCardsCount);
     const [showModalEducation, setShowModalEducation] = useState('')
-    // const [newPackName, setNewPackName] = useState('')
     useEffect(() => {
         setValue1(props.minCardsCount)
         setValue2(props.maxCardsCount)
@@ -142,7 +141,9 @@ export const Packs = (props: PropsType) => {
                                     onClick={() => c._id && props.deleteCardsPack(c._id)}>Применить</SuperButton>
                             </ModalContainer>
                             <ModalContainer name={'Update'}
-                                            disabled={c.user_id !== props.userId ? true : false}>
+                                            disabled={c.user_id !== props.userId ? true : false}
+                                            cardQuestion = {c.name}
+                                            setCardQuestion = {setPackName}>
                                 <h3>Обновить название колоды</h3>
                                 <SuperInputText
                                     value={packName}
