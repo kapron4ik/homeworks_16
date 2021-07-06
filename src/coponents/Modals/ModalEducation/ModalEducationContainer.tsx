@@ -7,11 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {CardsType, updateGrade} from "../../../redux/cards-reducer";
 import SuperButton from "../../common/c2-SuperButton/SuperButton";
 
-//IsLoading при подключении сбрасывает модалки, но если в модалке UseEffect постоянно его перезапускает
-//Скорректировать в модальніх окнах название для паков и карт
-//Увеличить размері инпутов в модальніх окнах
-//покрасить приложение
-
 type PropsType = {
 
     idPack: string

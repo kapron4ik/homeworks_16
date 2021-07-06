@@ -37,3 +37,8 @@ i.icon {
 i.icon:hover {
     color: #000000;
 }
+
+.modal input {
+    width: 80%;
+    margin-bottom: 20px;
+}

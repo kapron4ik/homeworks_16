@@ -7,10 +7,10 @@ import {CardReqType} from "../../types/entities";
 type ModalContainerPropsType = {
     name: string
     disabled?: boolean
-    setCardQuestion?: (cardQuestion: string)=>void
-    cardQuestion?: string
-    setCardAnswer?: (cardAnswer: string)=>void
-    cardAnswer?: string
+    setInput1?: (cardQuestion: string)=>void
+    input1?: string
+    setInput2?: (cardAnswer: string)=>void
+    input2?: string
 
 }
 
@@ -19,10 +19,10 @@ const ModalContainer: React.FC<ModalContainerPropsType> = (
         name,
         disabled,
         children,
-        setCardQuestion,
-        cardQuestion,
-        setCardAnswer,
-        cardAnswer
+        setInput1,
+        input1,
+        setInput2,
+        input2,
     }
 ) => {
     const [showModal, setShowModal] = useState(false)
@@ -33,10 +33,10 @@ const ModalContainer: React.FC<ModalContainerPropsType> = (
         {showModal &&
         <Modal
             showModal={setShowModal}
-            cardQuestion = {cardQuestion}
-            setCardQuestion = {setCardQuestion}
-            cardAnswer = {cardAnswer}
-            setCardAnswer = {setCardAnswer}>
+            input1 = {input1}
+            setInput1 = {setInput1}
+            input2 = {input2}
+            setInput2 = {setInput2}>
             {children}
         </Modal>}
     </>

@@ -103,10 +103,10 @@ export const Cards = (props: CardsPropsType) => {
                                     onClick={() => c._id && props.deleteCard(c._id)}>Применить</SuperButton>
                             </ModalContainer>
                             <ModalContainer name={'Update'}
-                                            cardQuestion = {c.question}
-                                            setCardQuestion = {setCardQuestion}
-                                            cardAnswer = {c.answer}
-                                            setCardAnswer = {setCardAnswer}>
+                                            input1 = {c.question}
+                                            setInput1 = {setCardQuestion}
+                                            input2 = {c.answer}
+                                            setInput2 = {setCardAnswer}>
                                 <h3>Изменить карту</h3>
                                 <SuperInputText
                                     value={cardQuestion}

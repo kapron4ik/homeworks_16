@@ -1,8 +1,9 @@
-import {CardReqType, DispathActionType} from "../types/entities";
+import {CardReqType, CardsReqType, DispathActionType} from "../types/entities";
 import {cardsAPI, packsAPI} from "../api/api";
 import {Dispatch} from "redux";
 import { getCardsReqTC } from "./cards-request-reducer";
 import {AppStateType} from "./store";
+import {setIsLoadingAC} from "./auth-reducer";
 
 
 const initialState = {
@@ -59,12 +60,11 @@ export const setCurrentPageCards = (currentPage: number) => {
 //         })
 // }
 
-export const addCard = (data:CardReqType) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>) => {
+export const addCard = (data:CardReqType) => (dispatch: (getCardsReqTC: (dispatch: Dispatch<DispathActionType>,getState:()=>AppStateType) => void) => void & Dispatch<DispathActionType>)=> {
     cardsAPI.addCards(data)
         .then(()=>{
             // dispatch(getCards(initialState.page,initialState.pageCount,cardsPack_id))
             dispatch(getCardsReqTC({}))
-
         })
 }
 

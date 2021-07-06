@@ -142,8 +142,8 @@ export const Packs = (props: PropsType) => {
                             </ModalContainer>
                             <ModalContainer name={'Update'}
                                             disabled={c.user_id !== props.userId ? true : false}
-                                            cardQuestion = {c.name}
-                                            setCardQuestion = {setPackName}>
+                                            input1 = {c.name}
+                                            setInput2 = {setPackName}>
                                 <h3>Обновить название колоды</h3>
                                 <SuperInputText
                                     value={packName}
